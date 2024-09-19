@@ -39,7 +39,6 @@ class Users(AbstractBaseUser):
 
 
 class Books(models.Model):
-
     title = models.CharField(max_length=100, verbose_name='عنوان')
     author = models.CharField(max_length=100, verbose_name='نویسنده')
     genre = models.CharField(max_length=100, verbose_name='ژانر')
@@ -54,13 +53,12 @@ class Books(models.Model):
 
 
 class Reviews(models.Model):
-
     user = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name='کاربر')
     book = models.ForeignKey(Books, on_delete=models.CASCADE, verbose_name='کتاب')
-    rating = models.SmallIntegerField(validators=[MaxValueValidator(5), MinValueValidator(1)], verbose_name='امتیاز')
+    rating = models.SmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], verbose_name='امتیاز')
 
     def __str__(self):
-        return f'{self.user.phone_number} - {self.book.title} => {self.rating}'
+        return f'{self.user.username} - {self.book.title} => {self.rating}'
 
     class Meta:
         verbose_name = 'نظر'
