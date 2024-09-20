@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   django:
-    image: achareh-interview
+    image: netbaan-sjarif-interview
     container_name: django
     build:
       context: ./code
