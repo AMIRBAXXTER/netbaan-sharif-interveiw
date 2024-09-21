@@ -74,7 +74,7 @@ def delete_review(user_id, book_id):
 def suggest_book_list(user_id):
     with connection.cursor() as cursor:
         cursor.execute(
-            f"SELECT b.genre,AVG(r.rating) as avg_rating FROM reviews r JOIN books b ON b.id = r.book_id WHERE r.user_id = %s GROUP BY b.genre ORDER BY avg_rating DESC LIMIT 3;",
+            f"SELECT b.genre,AVG(r.rating) as avg_rating FROM reviews r JOIN books b ON b.id = r.book_id WHERE r.user_id = %s GROUP BY b.genre ORDER BY avg_rating DESC LIMIT 1;",
             [user_id])
         rows = cursor.fetchone()
         favorite_genre = rows[0] if rows else None
