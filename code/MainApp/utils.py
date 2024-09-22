@@ -8,7 +8,6 @@ class BearerTokenAuthentication(TokenAuthentication):
 
 
 def validate_rating(rating):
-    print(0 < int(rating) < 5)
     if 0 < int(rating) <= 5:
         return rating
     return None
@@ -74,13 +73,13 @@ def delete_review(user_id, book_id):
 def suggest_book_list(user_id):
     with connection.cursor() as cursor:
         cursor.execute(
-            f"SELECT b.genre,AVG(r.rating) as avg_rating FROM reviews r JOIN books b ON b.id = r.book_id WHERE r.user_id = %s GROUP BY b.genre ORDER BY avg_rating DESC LIMIT 1;",
+            "SELECT b.genre,AVG(r.rating) as avg_rating FROM reviews r JOIN books b ON b.id = r.book_id WHERE r.user_id = %s GROUP BY b.genre ORDER BY avg_rating DESC LIMIT 1;",
             [user_id])
         rows = cursor.fetchone()
         favorite_genre = rows[0] if rows else None
         cursor.execute(
-            f"SELECT b.*,r.rating FROM books b LEFT JOIN reviews r ON b.id = r.book_id AND r.user_id = {user_id} WHERE b.genre = %s;",
-            [favorite_genre])
+            "SELECT b.*,r.rating FROM books b LEFT JOIN reviews r ON b.id = r.book_id AND r.user_id = %s WHERE b.genre = %s;",
+            [user_id, favorite_genre])
         columns = [column[0] for column in cursor.description]
         rows = cursor.fetchall()
         return [dict(zip(columns, row)) for row in rows]
